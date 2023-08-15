@@ -1,0 +1,22 @@
+{% extends "crud/base.html" %}
+{% block title %}使用者列表{% endblock %}
+{% block content %}
+<h2>使用者列表</h2>
+<a href="{{ url_for('crud.create_user') }}">新增使用者</a>
+<table>
+	<tr>
+		<th>使用者ID</th>
+		<th>使用者名稱</th>
+		<th>郵件位址</th>
+	</tr>
+	{% for user in users %}
+	<tr>
+		<td>
+		<a href="{{ url_for('crud.edit_user', user_id=user.id) }}">{{ user.id }}
+		</td>
+		<td>{{ user.username }}</td>
+		<td>{{ user.email }}</td>
+	</tr>
+	{% endfor %}
+</table>
+{% endblock %}

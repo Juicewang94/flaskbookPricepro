@@ -1,0 +1,10 @@
+table {
+    /* 鄰接的界線重疊成一條*/
+    border-collapse: collapse;
+}
+table,
+th,
+td {
+    /* 設為1px的實線，且調整顏色 */
+    border: 1px solid #c0c0c0;
+}

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <!-- 在繼承目的地實作title -->
+        <title>{% block title %}{% endblock %}</title>
+        <link rel="stylesheet" href="{{ url_for('crud.static', filename='style.css' ) }}" />
+    </head>
+    <body>
+        <div>
+            {% if current_user.is_authenticated %}
+            <p>
+                <span>{{ current_user.username }} welcome!! </span> -
+                <span>
+                    <a href="{{ url_for('auth.logout') }}">登出</a>
+                </span>
+            </p>
+            {% endif %}
+        </div>
+        <!-- 在繼承目的地實作content -->
+        {% block content %}{% endblock %}
+    </body>
+</html>
