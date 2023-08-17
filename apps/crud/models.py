@@ -9,6 +9,9 @@ class User(db.Model, UserMixin):
     # 指定表格名稱
     __tablename__ = "users"
     # 定義直欄內容
+    # for SQLit
+    #id = db.Column(db.Integer, primary_key=True)
+    # for MySQL
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, index=True)
     email = db.Column(db.String, unique=True, index=True)

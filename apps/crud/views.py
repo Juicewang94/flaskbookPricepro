@@ -53,6 +53,9 @@ def edit_user(user_id):
     form = UserForm()
 
     # 利用User模型取得使用者
+    # for SQLite
+    #user = User.query.filter_by(id=user_id).first()
+    # for MySQL
     user = User.query.filter_by(id=user_id).first()
 
     # 發送表單後，修改內容並重新導向使用者列表頁面
@@ -69,6 +72,9 @@ def edit_user(user_id):
 @crud.route("/users/<user_id>/delete", methods=["POST"])
 @login_required
 def delete_user(user_id):
+    # for SQLite
+    #user = User.query.filter_by(id=user_id).first()
+    # for MySQL
     user = User.query.filter_by(id=user_id).first()
     db.session.delete(user)
     db.session.commit()
