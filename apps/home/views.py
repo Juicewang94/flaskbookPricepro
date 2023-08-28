@@ -4,6 +4,7 @@ from apps.crud.models import User
 from flask import Blueprint, render_template, flash, redirect, request, url_for
 from flask_login import login_user, logout_user
 from flask import Flask, render_template_string, Response
+from apps.crud.models import Price
 import csv
 import pandas as pd
 import datetime
@@ -67,9 +68,11 @@ def qkread(num, name):
     plt.ylabel('每100g價格', fontproperties=font)
     plt.title(name, fontproperties=font)
     plt.xticks(rotation=45)
+    # 設定字型
+    fontset = {'family': 'serif', 'color':  'darkred', 'weight': 'normal', 'size': 6}
     # 在每個條狀上標示價格數值
     for i, value in enumerate(data['每100g價格']):
-        plt.text(data['日期'][i], value + 0.2, str(value), ha='center', fontproperties=font)  # 調整位置和偏移量
+        plt.text(data['日期'][i], value + 0.2, str(value), ha='center', fontdict=fontset)  # 調整位置和偏移量
     
     # 設定Y軸範圍
     plt.ylim(0, max(data['每100g價格']) + 6)
@@ -102,9 +105,11 @@ def index2():
     plt.ylabel('每100g價格', fontproperties=font)
     plt.title('台糖燕麥歷史價格', fontproperties=font)
     plt.xticks(rotation=45)
+    # 設定字型
+    fontset = {'family': 'serif', 'color':  'darkred', 'weight': 'normal', 'size': 6}
     # 在每個條狀上標示價格數值
     for i, value in enumerate(data['每100g價格']):
-        plt.text(data['日期'][i], value + 0.2, str(value), ha='center', fontproperties=font)  # 調整位置和偏移量
+        plt.text(data['日期'][i], value + 0.2, str(value), ha='center', fontdict=fontset)  # 調整位置和偏移量
     
     # 設定Y軸範圍
     plt.ylim(0, max(data['每100g價格']) + 2)
@@ -135,9 +140,11 @@ def index3():
     plt.ylabel('每100g價格', fontproperties=font)
     plt.title('馬玉山高纖大燕麥片歷史價格', fontproperties=font)
     plt.xticks(rotation=45)
+    # 設定字型
+    fontset = {'family': 'serif', 'color':  'darkred', 'weight': 'normal', 'size': 6}
     # 在每個條狀上標示價格數值
     for i, value in enumerate(data['每100g價格']):
-        plt.text(data['日期'][i], value + 0.2, str(value), ha='center', fontproperties=font)  # 調整位置和偏移量
+        plt.text(data['日期'][i], value + 0.2, str(value), ha='center', fontdict=fontset)  # 調整位置和偏移量
     
     # 設定Y軸範圍
     plt.ylim(0, max(data['每100g價格']) + 3)

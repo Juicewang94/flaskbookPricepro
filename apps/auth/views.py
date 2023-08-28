@@ -2,6 +2,7 @@
 from apps.app import db, mail
 from apps.auth.forms import SignUpForm, LoginForm
 from apps.crud.models import User
+from apps.crud.models import Price
 from flask import Blueprint, render_template, flash, redirect, request, url_for
 from flask_login import login_user, logout_user
 from flask_mail import Message
@@ -36,7 +37,6 @@ def signup():
         login_user(user)
 
         # 傳送郵件
-        #send_emailmessage(
         #password 在crud/model.py設置為hash，會無法加載到其他函數
         print(user.email, user.username)
         send_email(
@@ -44,13 +44,9 @@ def signup():
             "Thank you for the registration",
             user.username,
         )
-        # 重新導向contact端點
-        # flash("內容已傳送，您會收到一封註冊確認信，請至註冊郵件中查看，感謝您的註冊!")
-
         # 若GET參數的next鍵沒有值，則重新導向使用者的列表頁面
         next_ = request.args.get("next")
         if next_ is None or not next_.startswith("/"):
-            #next_ = url_for("crud.users")
             next_ = url_for("home.index")
         return redirect(next_)
 
@@ -87,8 +83,18 @@ def login():
 @auth.route("/logout")
 def logout():
     logout_user()
-    #return redirect(url_for("auth.login"))
     return redirect(url_for("home.index"))  
+
+@auth.route("/check")
+def check():
+    #data = db.session.query(Price).filter_by(product_id='4010500').all()
+    data = db.session.query(Price).filter_by(name='台糖燕麥片').all()
+    print("===========================Price list===============================")
+    print(data)
+    data1 = db.session.query(User).all()
+    print(data1)
+    print("===========================Price list End============================")
+    return redirect(url_for("home.index"))
 
 #def send_email(to, subject, template, **kwargs):
 #    """傳送郵件的函數"""

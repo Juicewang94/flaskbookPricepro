@@ -106,16 +106,16 @@ class BaseConfig:
 
 # 繼承BaseConfig，建立LocalConfig類別
 class LocalConfig(BaseConfig):
-    #SQLALCHEMY_DATABASE_URI = "mysql+pymysql://user1:password@34.172.156.246:3306/gcpproject"
-    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://luke:1qaz2wsx@35.184.152.217:3306/PRICEPRO"
+    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://user1:password@34.172.156.246:3306/gcpproject"
+    #SQLALCHEMY_DATABASE_URI = "mysql+pymysql://luke:1qaz2wsx@35.184.152.217:3306/PRICE2"
     #SQLALCHEMY_DATABASE_URI = f"sqlite:///{basedir / 'local.sqlite'}"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = True
 
 # 繼承BaseConfig，建立TestingConfig類別
 class TestingConfig(BaseConfig):
-    #SQLALCHEMY_DATABASE_URI = "mysql+pymysql://user1:password@34.172.156.246:3306/gcpproject"
-    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://luke:1qaz2wsx@35.184.152.217:3306/PRICEPRO"
+    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://user1:password@34.172.156.246:3306/gcpproject"
+    #SQLALCHEMY_DATABASE_URI = "mysql+pymysql://luke:1qaz2wsx@35.184.152.217:3306/PRICEPRO"
     #SQLALCHEMY_DATABASE_URI = f"sqlite:///{basedir / 'testing.sqlite'}"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     WTF_CSRF_ENABLED = False

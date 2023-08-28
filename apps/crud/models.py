@@ -40,3 +40,16 @@ class User(db.Model, UserMixin):
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(user_id)
+
+class Price(db.Model):
+    # 指定表格名稱
+    __tablename__ = "price_record"
+    # 定義直欄內容
+    # for MySQL
+    update_date = db.Column(db.DateTime, primary_key=True)
+    product_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    pxgo_price = db.Column(db.Integer)
+    pxbox_price = db.Column(db.Integer)
+    rmart_price = db.Column(db.Integer)
+    crf_price = db.Column(db.Integer)
