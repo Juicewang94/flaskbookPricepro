@@ -100,6 +100,11 @@
                         
                             let file = document.getElementById("select_img").files[0];
                             reader.readAsDataURL(file);
+							
+							//let predictionValue = document.getElementById("pred").textContent;
+
+							// 发送预测值到后端
+							//sendPredictionToBackend(predictionValue);							
                     	}
 
                         async function predict(img) {
@@ -111,9 +116,26 @@
                     				index = i;
                     			}
                     		}
-                    		document.getElementById("pred").innerHTML = pred[index]["label"]
-                    		document.getElementById("conf").innerHTML = pred[index]["prob"].toPrecision(4)
+                    		// document.getElementById("pred").innerHTML = pred[index]["label"]
+                    		// document.getElementById("conf").innerHTML = pred[index]["prob"].toPrecision(4)
+                            const predictionLabel = pred[index]["label"];
+                            const predictionProb = pred[index]["prob"].toPrecision(4); 
+                            document.getElementById("pred").innerHTML = predictionLabel;
+                            document.getElementById("conf").innerHTML = predictionProb;
+                            // 發送預測值到Python端
+							sendPredictionToBackend(predictionLabel);
                     	}
+                        async function sendPredictionToBackend(predictionLabel) {
+                            const response = await fetch("{{ url_for('home.process_prediction') }}", {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({ prediction: predictionLabel }),
+                            });
+                            const responseData = await response.json();
+                            console.log(responseData.message); // 印出從Python端返回的訊息
+                        }
                     </script>
                 </div>
             </div>

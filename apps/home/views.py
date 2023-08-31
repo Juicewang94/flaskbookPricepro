@@ -3,7 +3,7 @@ from apps.auth.forms import SignUpForm, LoginForm
 from apps.crud.models import User
 from flask import Blueprint, render_template, flash, redirect, request, url_for
 from flask_login import login_user, logout_user
-from flask import Flask, render_template_string, Response
+from flask import Flask, render_template_string, Response, jsonify
 from apps.crud.models import Price
 import csv
 import pandas as pd
@@ -154,3 +154,19 @@ def index3():
     plt.close()
     return render_template("home/index3.html")
 
+@home.route("/process_prediction", methods=['POST'])
+def process_prediction():
+    print("======process prediction======")
+    data = request.get_json()
+    prediction = data.get('prediction')
+
+    if prediction == "QKFN":
+        response_message = "this is QKFN"
+    elif prediction == "QKHC":
+        response_message = "this is QKHC"
+    elif prediction == "QKYM":
+        response_message = "this is QKYM"
+    else:
+        response_message = "this is Oats"
+
+    return jsonify({"message": response_message})
