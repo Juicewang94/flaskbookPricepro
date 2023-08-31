@@ -6,6 +6,7 @@ from apps.crud.models import Price
 from flask import Blueprint, render_template, flash, redirect, request, url_for
 from flask_login import login_user, logout_user
 from flask_mail import Message
+from sqlalchemy import func
 
 # 使用Blueprint產生auth
 auth = Blueprint("auth", __name__, template_folder="templates", static_folder="static")
@@ -88,11 +89,14 @@ def logout():
 @auth.route("/check")
 def check():
     #data = db.session.query(Price).filter_by(product_id='4010500').all()
-    data = db.session.query(Price).filter_by(name='台糖燕麥片').all()
     print("===========================Price list===============================")
-    print(data)
-    data1 = db.session.query(User).all()
-    print(data1)
+    #sql = '''select * from price_record where product_id in (2012400)'''
+    #query_data = db.engine.execute(sql)
+    #print(query_data)
+    data = Price.query.filter_by(name='台糖燕麥片').all()
+    for i in range(0, 15):
+        print(data[i].update_date)
+        print(data[i].pxgo_price)
     print("===========================Price list End============================")
     return redirect(url_for("home.index"))
 

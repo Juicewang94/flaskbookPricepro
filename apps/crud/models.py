@@ -53,3 +53,12 @@ class Price(db.Model):
     pxbox_price = db.Column(db.Integer)
     rmart_price = db.Column(db.Integer)
     crf_price = db.Column(db.Integer)
+
+    def __init__(self, update_date, product_id, name, pxgo_price, pxbox_price, rmart_price, crf_price):
+        self.update_date = update_date
+        self.product_id = product_id
+        self.name = name
+        self.pxgo_price = pxgo_price
+        self.pxbox_price = pxbox_price
+        self.rmart_price = rmart_price
+        self.crf_price = crf_price
