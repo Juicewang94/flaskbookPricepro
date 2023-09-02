@@ -72,7 +72,8 @@ def qkread(num, name):
     fontset = {'family': 'serif', 'color':  'darkred', 'weight': 'normal', 'size': 6}
     # 在每個條狀上標示價格數值
     for i, value in enumerate(data['每100g價格']):
-        plt.text(data['日期'][i], value + 0.2, str(value), ha='center', fontdict=fontset)  # 調整位置和偏移量
+        if (i%2)!=0:
+            plt.text(data['日期'][i], value + 0.2, str(value), ha='center', fontdict=fontset)  # 調整位置和偏移量
     
     # 設定Y軸範圍
     plt.ylim(0, max(data['每100g價格']) + 6)
@@ -109,7 +110,8 @@ def index2():
     fontset = {'family': 'serif', 'color':  'darkred', 'weight': 'normal', 'size': 6}
     # 在每個條狀上標示價格數值
     for i, value in enumerate(data['每100g價格']):
-        plt.text(data['日期'][i], value + 0.2, str(value), ha='center', fontdict=fontset)  # 調整位置和偏移量
+        if (i%2)!=0:
+            plt.text(data['日期'][i], value + 0.2, str(value), ha='center', fontdict=fontset)  # 調整位置和偏移量
     
     # 設定Y軸範圍
     plt.ylim(0, max(data['每100g價格']) + 2)
@@ -144,7 +146,8 @@ def index3():
     fontset = {'family': 'serif', 'color':  'darkred', 'weight': 'normal', 'size': 6}
     # 在每個條狀上標示價格數值
     for i, value in enumerate(data['每100g價格']):
-        plt.text(data['日期'][i], value + 0.2, str(value), ha='center', fontdict=fontset)  # 調整位置和偏移量
+        if (i%2)!=0:
+            plt.text(data['日期'][i], value + 0.2, str(value), ha='center', fontdict=fontset)  # 調整位置和偏移量
     
     # 設定Y軸範圍
     plt.ylim(0, max(data['每100g價格']) + 3)

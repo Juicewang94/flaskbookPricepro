@@ -80,7 +80,7 @@
                     <script src="https://unpkg.com/@tensorflow/tfjs-automl"></script>
 
                     <div>Image: <input type="file" id='select_img' accept="image/*, capture=camera" onchange="preview()"></div>
-                    <div>Prediction: <label id="pred"></label>/ Confidence: <label id="conf"></label></div>
+                    <div>Prediction: <label id="pred"></label>/ Confidence: <label id="conf"></label>/ ProductName: <label id="pname"></label></div>
                     <img id="preview_img" /><br>
                     <script language="javascript">		
 						const MODEL_NAME = "{{ url_for('home.static', filename='dist/tf-js/model.json') }}"
@@ -106,8 +106,7 @@
 							// 发送预测值到后端
 							//sendPredictionToBackend(predictionValue);							
                     	}
-
-                        async function predict(img) {
+                       async function predict(img) {
                             const model = await tf.automl.loadImageClassification(MODEL_NAME);
                     		const pred = await model.classify(img);
                     		let index = 0
@@ -122,10 +121,15 @@
                             const predictionProb = pred[index]["prob"].toPrecision(4); 
                             document.getElementById("pred").innerHTML = predictionLabel;
                             document.getElementById("conf").innerHTML = predictionProb;
-                            // 發送預測值到Python端
-							sendPredictionToBackend(predictionLabel);
-                    	}
-                        async function sendPredictionToBackend(predictionLabel) {
+                            // 使用映射表查找產品编號
+                            const productCode = productCodeMapping[predictionLabel];
+                            const productName = productNameMapping[predictionLabel];
+                            console.log(productCode)
+                            document.getElementById("pname").innerHTML = productName;
+
+                        }
+                        async function getProductData(productCode) {
+                            console.log(predictionLabel); 
                             const response = await fetch("{{ url_for('home.process_prediction') }}", {
                                 method: 'POST',
                                 headers: {
@@ -133,9 +137,71 @@
                                 },
                                 body: JSON.stringify({ prediction: predictionLabel }),
                             });
-                            const responseData = await response.json();
-                            console.log(responseData.message); // 印出從Python端返回的訊息
+                            console.log(response); 
+                            //const responseData = await response.json();
+                            //console.log(responseData.message); // 印出從Python端返回的訊息
+                            try {
+                                const responseData = await response.json(); // 解析响应为 JSON
+                                console.log(responseData.message);
+                            } catch (error) {
+                                console.error('Error parsing JSON:', error);
+                            }
                         }
+                        async function getProductData(productCode) {
+                            // 發送產品编號到後端
+                            fetch('/get_product_data', {
+                                method: 'POST',
+                                body: JSON.stringify({ productCode: productCode }),
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                document.getElementById('product_name').textContent = data.product_name;
+                                document.getElementById('other_data').textContent = data.other_data;
+                            });
+                        }
+                        const productCodeMapping = {
+                            "QKIS800": 1010800,
+                            "QKIS1100": 1011100,
+                            "QKIS1250": 1011250,
+                            "QKIS1700": 1011700,
+                            "QKIS2600": 1012600,
+                            "QKSS800": 1020800,
+                            "QKSS1200": 1021200,
+                            "QKOR": 1030800,
+                            "QKRY700": 1040700,
+                            "QKRY1500": 1041500,
+                            "QKYM": 1050700,
+                            "QKOG": 1060730,
+                            "QKFN": 1070700,
+                            "QKHC": 1080700,
+                            "MYS800": 2010800,
+                            "MYS1600": 2011600,
+                            "MYS2400": 2012400,
+                            "TSG":4010500
+                        };
+                        const productNameMapping = {
+                            "QKIS800":"桂格大燕麥片即沖即食800g",
+                            "QKIS1100": "桂格大燕麥片即沖即食1100g",
+                            "QKIS1250": "桂格大燕麥片即沖即食1250g",
+                            "QKIS1700": "桂格大燕麥片即沖即食1700g",
+                            "QKIS2600": "桂格大燕麥片即沖即食2600g",
+                            "QKSS800": "桂格大燕麥片嚴選薄片800g",
+                            "QKSS1200": "桂格大燕麥片嚴選薄片1200g",
+                            "QKOR": "桂格原片原味大燕麥片800g",
+                            "QKRY700": "桂格紅麴蕎麥大燕麥片700g",
+                            "QKRY1500": "桂格紅麴蕎麥大燕麥片1500g",
+                            "QKYM": "桂格紫米山藥大燕麥片700g",
+                            "QKOG": "桂格有機大燕麥片730g",
+                            "QKFN": "桂格機能燕麥片700g",
+                            "QKHC": "桂格高鈣燕麥片700g",
+                            "MYS800": "馬玉山高纖大燕麥片800g",
+                            "MYS1600": "馬玉山高纖大燕麥片1600g",
+                            "MYS2400": "馬玉山高纖大燕麥片2400g",
+                            "TSG": "台糖燕麥片500g"
+                        };
                     </script>
                 </div>
             </div>

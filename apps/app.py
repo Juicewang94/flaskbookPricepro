@@ -22,20 +22,20 @@ login_manager.login_message = ""
 # 建立Mail實體
 mail = Mail()
 
-def create_app(config_key):
+#def create_app(config_key):
+def create_app():
     app = Flask(__name__)
     # 加載config_key配對的環境組態類別(以from_object設定應用程式組態)
-    app.config.from_object(config[config_key])
-#    # 以from_mapping設定應用程式SQLAlchemy組態
-#    app.config.from_mapping(
-#        SECRET_KEY = "2AZSMss3p5QPbcY2hBsJ",
-#        SQLALCHEMY_DATABASE_URI = f"sqlite:///{Path(__file__).parent.parent / 'local.sqlite'}",
-#        SQLALCHEMY_TRACK_MODIFICATIONS = False,
-#        SQLALCHEMY_ECHO = True,
-#        WTF_CSRF_SECRET_KEY = "AuwzyszU5sugKN7KZs6f"
-#    )
-#    print(f"sqlite:///{Path(__file__).parent.parent / 'local.sqlite'}")
-# 增加Mail類別的組態
+    #app.config.from_object(config[config_key])
+    # 以from_mapping設定應用程式SQLAlchemy組態
+    app.config.from_mapping(
+        SECRET_KEY = "2AZSMss3p5QPbcY2hBsJ",
+        WTF_CSRF_SECRET_KEY = "AuwzyszU5sugKN7KZs6f",
+        SQLALCHEMY_DATABASE_URI = "mysql+pymysql://user1:password@34.172.156.246:3306/gcpproject",
+        SQLALCHEMY_TRACK_MODIFICATIONS = False,
+        SQLALCHEMY_ECHO = True
+    )
+    # 增加Mail類別的組態
     app.config["MAIL_SERVER"] = os.environ.get("MAIL_SERVER")
     app.config["MAIL_PORT"] = os.environ.get("MAIL_PORT")
     app.config["MAIL_USE_TLS"] = os.environ.get("MAIL_USE_TLS")
