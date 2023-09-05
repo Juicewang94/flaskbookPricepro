@@ -43,7 +43,7 @@ def load_user(user_id):
 
 class Price(db.Model):
     # 指定表格名稱
-    __tablename__ = "price_record"
+    __tablename__ = "price_origin"
     # 定義直欄內容
     # for MySQL
     update_date = db.Column(db.DateTime, primary_key=True)
@@ -54,7 +54,8 @@ class Price(db.Model):
     rmart_price = db.Column(db.Integer)
     crf_price = db.Column(db.Integer)
 
-    def __init__(self, update_date, product_id, name, pxgo_price, pxbox_price, rmart_price, crf_price):
+
+    def __init__(self, update_date, product_id, name, pxgo_price, pxbox_price, rmart_price,crf_price):
         self.update_date = update_date
         self.product_id = product_id
         self.name = name

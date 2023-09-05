@@ -73,7 +73,8 @@ def qkread(num, name):
     # 在每個條狀上標示價格數值
     for i, value in enumerate(data['每100g價格']):
         if (i%2)!=0:
-            plt.text(data['日期'][i], value + 0.2, str(value), ha='center', fontdict=fontset)  # 調整位置和偏移量
+            # 調整位置和偏移量
+            plt.text(data['日期'][i], value + 0.2, str(value), ha='center', fontdict=fontset)  
     
     # 設定Y軸範圍
     plt.ylim(0, max(data['每100g價格']) + 6)
@@ -157,19 +158,22 @@ def index3():
     plt.close()
     return render_template("home/index3.html")
 
-@home.route("/process_prediction", methods=['POST'])
-def process_prediction():
-    print("======process prediction======")
-    data = request.get_json()
-    prediction = data.get('prediction')
-
-    if prediction == "QKFN":
-        response_message = "this is QKFN"
-    elif prediction == "QKHC":
-        response_message = "this is QKHC"
-    elif prediction == "QKYM":
-        response_message = "this is QKYM"
-    else:
-        response_message = "this is Oats"
-
-    return jsonify({"message": response_message})
+@home.route("/check/<product_id>", methods=["POST"])
+def check(product_id):
+    print("===========================Price list===============================")
+    product = Price.query.filter_by(product_id=product_id).all()
+    # 從DB抓取最新(最後一天)的價格數據
+    print(product[-1].update_date)
+    price1 = product[-1].pxbox_price
+    price2 = product[-1].rmart_price
+    price3 = product[-1].crf_price
+    # 建構包含價格的字典
+    price_data = {
+        'pxbox_price': price1,
+        'rmart_price': price2,
+        'crf_price': price3
+    }
+    print(price_data)
+    print("===========================Price list End============================")
+    # 將數據轉換為JSON並返回前端
+    return jsonify(price_data)

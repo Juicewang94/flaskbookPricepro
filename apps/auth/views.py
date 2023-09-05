@@ -40,11 +40,11 @@ def signup():
         # 傳送郵件
         #password 在crud/model.py設置為hash，會無法加載到其他函數
         print(user.email, user.username)
-        send_email(
-            user.email,
-            "Thank you for the registration",
-            user.username,
-        )
+#        send_email(
+#            user.email,
+#            "Thank you for the registration",
+#            user.username,
+#        )
         # 若GET參數的next鍵沒有值，則重新導向使用者的列表頁面
         next_ = request.args.get("next")
         if next_ is None or not next_.startswith("/"):
@@ -66,8 +66,6 @@ def login():
             # 將使用者資訊存至session
             login_user(user)
             # 重新導向使用者的列表頁面
-            print("--------Debug info--------:", user)
-            print("--------Debug info--------:", form.email.data)
             if form.email.data == "juicewang94@gmail.com": #set manage account
                 return redirect(url_for("crud.users"))
             else:
@@ -86,17 +84,17 @@ def logout():
     logout_user()
     return redirect(url_for("home.index"))  
 
-@auth.route("/check")
-def check():
+@auth.route("/check/<product_id>", methods=["POST"])
+def check(product_id):
     #data = db.session.query(Price).filter_by(product_id='4010500').all()
     print("===========================Price list===============================")
     #sql = '''select * from price_record where product_id in (2012400)'''
     #query_data = db.engine.execute(sql)
     #print(query_data)
-    data = Price.query.filter_by(name='台糖燕麥片').all()
+    data = Price.query.filter_by(product_id=product_id, mart_id=4).all()
     for i in range(0, 15):
         print(data[i].update_date)
-        print(data[i].pxgo_price)
+        print(data[i].price)
     print("===========================Price list End============================")
     return redirect(url_for("home.index"))
 

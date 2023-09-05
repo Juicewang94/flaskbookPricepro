@@ -33,7 +33,8 @@ def create_app():
         WTF_CSRF_SECRET_KEY = "AuwzyszU5sugKN7KZs6f",
         SQLALCHEMY_DATABASE_URI = "mysql+pymysql://user1:password@34.172.156.246:3306/gcpproject",
         SQLALCHEMY_TRACK_MODIFICATIONS = False,
-        SQLALCHEMY_ECHO = True
+        SQLALCHEMY_ECHO = True,
+        WTF_CSRF_ENABLED = False
     )
     # 增加Mail類別的組態
     app.config["MAIL_SERVER"] = os.environ.get("MAIL_SERVER")

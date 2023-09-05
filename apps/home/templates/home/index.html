@@ -81,6 +81,9 @@
 
                     <div>Image: <input type="file" id='select_img' accept="image/*, capture=camera" onchange="preview()"></div>
                     <div>Prediction: <label id="pred"></label>/ Confidence: <label id="conf"></label>/ ProductName: <label id="pname"></label></div>
+                    <div>全聯今日售價: <label id="pxbox_price"></label></div>
+                    <div>大潤發今日售價: <label id="rmart_price"></label></div>
+                    <div>家樂福今日售價: <label id="crf_price"></label></div>
                     <img id="preview_img" /><br>
                     <script language="javascript">		
 						const MODEL_NAME = "{{ url_for('home.static', filename='dist/tf-js/model.json') }}"
@@ -95,16 +98,13 @@
                             reader.onload = function (event) {
                                 let img = document.getElementById("preview_img");
                                 img.src = event.target.result;
+                                img.style.width = '60%';
                                 predict(img);
                             };
                         
                             let file = document.getElementById("select_img").files[0];
                             reader.readAsDataURL(file);
-							
-							//let predictionValue = document.getElementById("pred").textContent;
-
-							// 发送预测值到后端
-							//sendPredictionToBackend(predictionValue);							
+					
                     	}
                        async function predict(img) {
                             const model = await tf.automl.loadImageClassification(MODEL_NAME);
@@ -126,40 +126,28 @@
                             const productName = productNameMapping[predictionLabel];
                             console.log(productCode)
                             document.getElementById("pname").innerHTML = productName;
+                            getProductData(productCode);
 
                         }
                         async function getProductData(productCode) {
-                            console.log(predictionLabel); 
-                            const response = await fetch("{{ url_for('home.process_prediction') }}", {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify({ prediction: predictionLabel }),
-                            });
-                            console.log(response); 
-                            //const responseData = await response.json();
-                            //console.log(responseData.message); // 印出從Python端返回的訊息
-                            try {
-                                const responseData = await response.json(); // 解析响应为 JSON
-                                console.log(responseData.message);
-                            } catch (error) {
-                                console.error('Error parsing JSON:', error);
-                            }
-                        }
-                        async function getProductData(productCode) {
+                            console.log(productCode); 
                             // 發送產品编號到後端
-                            fetch('/get_product_data', {
-                                method: 'POST',
-                                body: JSON.stringify({ productCode: productCode }),
-                                headers: {
-                                    'Content-Type': 'application/json'
+                            const url = `./check/${productCode}`;
+                            fetch(url, {
+                                "method": "POST",
+                                "headers": {
+                                    "Content-Type": "application/json",
                                 }
                             })
                             .then(response => response.json())
                             .then(data => {
-                                document.getElementById('product_name').textContent = data.product_name;
-                                document.getElementById('other_data').textContent = data.other_data;
+                                console.log(data); // 确保data被正确接收
+                                document.getElementById('pxbox_price').textContent = data.pxbox_price;
+                                document.getElementById('rmart_price').textContent = data.rmart_price;
+                                document.getElementById('crf_price').textContent = data.crf_price;
+                                document.getElementById("pxbox_price").innerHTML = data.pxbox_price;
+                                document.getElementById("rmart_price").innerHTML = data.rmart_price;
+                                document.getElementById("crf_price").innerHTML = data.crf_price;
                             });
                         }
                         const productCodeMapping = {
@@ -181,7 +169,7 @@
                             "MYS1600": 2011600,
                             "MYS2400": 2012400,
                             "TSG":4010500
-                        };
+                        }
                         const productNameMapping = {
                             "QKIS800":"桂格大燕麥片即沖即食800g",
                             "QKIS1100": "桂格大燕麥片即沖即食1100g",
